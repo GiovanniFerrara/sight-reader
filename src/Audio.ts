@@ -1,13 +1,22 @@
 import SmartArray from './SmartArray'
-import { KEYS } from './constants'
+import {
+  KEYS
+} from './constants'
+import { ElementsRefs } from './RefManager'
+import Graph from './Graph'
 
 class Audio {
-  constructor (elementsRefs) {
+  pitchSamples: SmartArray
+  elementsRefs: ElementsRefs
+  graph: Graph
+
+  constructor(elementsRefs, graph) {
     this.pitchSamples = new SmartArray()
     this.elementsRefs = elementsRefs
+    this.graph = graph
   }
 
-  drawPitchMarkers (canvas2Context) {
+  drawPitchMarkers(canvas2Context) {
     canvas2Context.fillStyle = 'firebrick'
     canvas2Context.font = '14px serif'
     for (let i = 25; i < 1200; i += 25) {
@@ -17,10 +26,10 @@ class Audio {
     }
   }
 
-  start () {
+  start():void {
     let audioReady = false
     let loudEnough = false
-    const MIN_VOLUME = 5
+    const MIN_VOLUME = 10
 
     const ref = document.location.pathname.replace(/^\//, '')
 
@@ -28,7 +37,9 @@ class Audio {
     const audioEl = this.elementsRefs[ref] || document.querySelector('audio')
     const analyser = audioContext.createAnalyser()
 
-    const { sampleRate } = audioContext
+    const {
+      sampleRate
+    } = audioContext
 
     analyser.fftSize = 2048
     analyser.minDecibels = -90
@@ -38,11 +49,13 @@ class Audio {
 
     const canvasContext = this.elementsRefs.canvas.getContext('2d')
 
-    const userMediaConstraints = { audio: true }
+    const userMediaConstraints = {
+      audio: true
+    }
 
     const getUserMediaSuccess = stream => {
       const audioSource = audioContext.createMediaStreamSource(stream)
-      this.elementsRefs.mic_audio.src = audioSource
+      // this.elementsRefs.mic_audio.src = audioSource
 
       audioSource.connect(analyser)
       // comment/uncomment to play to speakers
@@ -59,7 +72,7 @@ class Audio {
     let lastItem = 0
     const STEPS_THRESHOLD = 5
 
-    const getKey = () => {
+    const getKey = (): {pos: number; hz: number; name: string} => {
       const pitch = this.pitchSamples.mode
       let closestLower = KEYS[0]
       let closestHigher = KEYS[KEYS.length - 1]
@@ -75,18 +88,18 @@ class Audio {
       const distanceToLower = Math.abs(pitch - closestLower.hz)
       const distanceToHigher = Math.abs(pitch - closestHigher.hz)
 
-      return Math.min(distanceToLower, distanceToHigher) === distanceToLower
-        ? closestLower
-        : closestHigher
+      return Math.min(distanceToLower, distanceToHigher) === distanceToLower ?
+        closestLower :
+        closestHigher
     }
 
-    const renderKey = () => {
+    const renderKey = ():void => {
       const key = getKey()
+      this.graph.addPoint(Date.now(), key.pos)
 
       const keyEls = document.querySelectorAll('[piano-key]')
 
       for (const keyEl of keyEls) {
-        keyEl.style.fill = ''
         keyEl.classList.remove('piano-key--lit')
       }
 
@@ -96,7 +109,7 @@ class Audio {
       this.pitchSamples.empty()
     }
 
-    const drawWave = () => {
+    const drawWave = ():void => {
       if (!loudEnough) return
       canvasContext.fillStyle = 'firebrick'
       analyser.getByteTimeDomainData(dataArray)
@@ -120,7 +133,7 @@ class Audio {
       })
     }
 
-    const drawFreq = () => {
+    const drawFreq = ():void => {
       canvasContext.fillStyle = 'lightgray'
       analyser.getByteFrequencyData(dataArray)
       let volumeTotal = 0
@@ -139,10 +152,10 @@ class Audio {
       }
 
       loudEnough = nowLoudEnough
-      this.elementsRefs.db.textContent = volume
+      this.elementsRefs.db.insertAdjacentText('afterend', `${volume}`)
     }
 
-    const renderAudio = () => {
+    const renderAudio = (): void => {
       window.requestAnimationFrame(renderAudio)
 
       if (!audioReady) return

@@ -1,4 +1,6 @@
 class SmartArray {
+  public dataArray: number[];
+
   constructor () {
     this.dataArray = []
   }

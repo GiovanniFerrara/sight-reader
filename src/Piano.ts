@@ -1,4 +1,8 @@
-import { KEYS } from './constants'
+import {
+  KEYS
+} from './constants'
+
+import { ElementsRefs } from './RefManager'
 
 const COLORS = {
   EBONY: 'ebony',
@@ -10,7 +14,7 @@ const SHIFTS = {
   RIGHT: 'RIGHT'
 }
 
-function getKeyDeets (keyPos) {
+function getKeyDeets(keyPos: number): {shift: string; color: string} {
   const key = keyPos % 12
   let shift
   let color
@@ -28,15 +32,20 @@ function getKeyDeets (keyPos) {
     shift = null
     color = COLORS.IVORY
   }
-  return { shift, color }
+  return {
+    shift,
+    color
+  }
 }
 
 class Piano {
-  constructor (refs) {
+  refs: ElementsRefs
+
+  constructor(refs) {
     this.refs = refs
   }
 
-  render () {
+  render():void {
     // key dimensions from http://www.rwgiangiulio.com/construction/manual/
     const pianoEl = this.refs.piano
     const ns = 'http://www.w3.org/2000/svg'
@@ -68,21 +77,21 @@ class Piano {
       } else {
         left += 22
         const keyText = document.createElementNS(ns, 'text')
-        keyText.textContent = key.pos
+        keyText.textContent = `${key.pos}`
 
-        keyText.setAttribute('x', x + width / 2)
-        keyText.setAttribute('y', 10)
+        keyText.setAttribute('x', `${x + width / 2}`)
+        keyText.setAttribute('y', `${10}`)
         keyText.setAttribute('text-anchor', 'middle')
         whiteKeyGroup.appendChild(keyText)
       }
 
-      keyRect.setAttribute('rx', 2)
-      keyRect.setAttribute('x', x)
-      keyRect.setAttribute('y', 14)
-      keyRect.setAttribute('width', width)
-      keyRect.setAttribute('height', height)
+      keyRect.setAttribute('rx', "2")
+      keyRect.setAttribute('x', `${x}`)
+      keyRect.setAttribute('y', "14")
+      keyRect.setAttribute('width', `${width}`)
+      keyRect.setAttribute('height', `${height}`)
       keyRect.setAttribute('data-ref', `key_${key.pos}`)
-      keyRect.setAttribute('piano-key', true)
+      keyRect.setAttribute('piano-key', 'true')
       keyRect.classList.add('piano-key')
       keyRect.classList.add(`piano-key--${keyDeets.color}`)
 

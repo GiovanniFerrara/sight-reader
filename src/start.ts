@@ -1,6 +1,7 @@
 import Audio from './Audio'
 import Piano from './Piano'
 import RefManager from './RefManager'
+import Graph from './Graph'
 
 const start = () => {
   // build the refs after rendering the piano
@@ -11,7 +12,8 @@ const start = () => {
   piano.render()
   refManager.getRefs()
 
-  const audio = new Audio(refManager.refs)
+  const graph = new Graph(refManager.refs['graph'])
+  const audio = new Audio(refManager.refs, graph)
   audio.start()
 }
 
