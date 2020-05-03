@@ -55,7 +55,8 @@ class Audio {
 
     const getUserMediaSuccess = stream => {
       const audioSource = audioContext.createMediaStreamSource(stream)
-      // this.elementsRefs.mic_audio.src = audioSource
+      console.log(audioSource)
+      this.elementsRefs.mic_audio.src = audioSource
 
       audioSource.connect(analyser)
       // comment/uncomment to play to speakers
