@@ -56,8 +56,6 @@ class Audio {
 
     navigator.getUserMedia(userMediaConstraints, getUserMediaSuccess, getUserMediaError)
 
-    // canvas2Context.fillStyle = 'rgba(0, 0, 0, 0.03)';
-
     let lastItem = 0
     const STEPS_THRESHOLD = 5
 
@@ -84,9 +82,7 @@ class Audio {
 
     const renderKey = () => {
       const key = getKey()
-      // this.elementsRefs.note.textContent = `That was note number ${key.pos}: ${key.name}`;
 
-      // TODO (davidg): push this out into the Piano class
       const keyEls = document.querySelectorAll('[piano-key]')
 
       for (const keyEl of keyEls) {
@@ -96,7 +92,7 @@ class Audio {
 
       const pressedKeyEl = this.elementsRefs[`key_${key.pos}`]
       pressedKeyEl.classList.add('piano-key--lit')
-      // if (keyEl) keyEl.style.fill = '#2196f3';
+
       this.pitchSamples.empty()
     }
 
@@ -115,7 +111,6 @@ class Audio {
           if (elapsedSteps > STEPS_THRESHOLD) {
             const hertz = 1 / (elapsedSteps / sampleRate) // sampleRate = 44100
             this.pitchSamples.push(hertz)
-            // canvas2Context.fillRect(4, hertz / 2, 65, 1); // pitch marker
           }
         }
 

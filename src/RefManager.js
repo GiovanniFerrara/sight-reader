@@ -1,6 +1,6 @@
 class RefManager {
   constructor (refs) {
-    this.refs = Object.keys(refs).length ? refs : {}
+    this.refs = refs || {}
   }
 
   getRefs () {

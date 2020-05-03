@@ -630,8 +630,7 @@ var Audio = /*#__PURE__*/function () {
         err && console.error(err);
       };
 
-      navigator.getUserMedia(userMediaConstraints, getUserMediaSuccess, getUserMediaError); // canvas2Context.fillStyle = 'rgba(0, 0, 0, 0.03)';
-
+      navigator.getUserMedia(userMediaConstraints, getUserMediaSuccess, getUserMediaError);
       var lastItem = 0;
       var STEPS_THRESHOLD = 5;
 
@@ -655,9 +654,7 @@ var Audio = /*#__PURE__*/function () {
       };
 
       var renderKey = function renderKey() {
-        var key = getKey(); // this.elementsRefs.note.textContent = `That was note number ${key.pos}: ${key.name}`;
-        // TODO (davidg): push this out into the Piano class
-
+        var key = getKey();
         var keyEls = document.querySelectorAll('[piano-key]');
 
         var _iterator = _createForOfIteratorHelper(keyEls),
@@ -677,7 +674,7 @@ var Audio = /*#__PURE__*/function () {
 
         var pressedKeyEl = _this.elementsRefs["key_".concat(key.pos)];
 
-        pressedKeyEl.classList.add('piano-key--lit'); // if (keyEl) keyEl.style.fill = '#2196f3';
+        pressedKeyEl.classList.add('piano-key--lit');
 
         _this.pitchSamples.empty();
       };
@@ -696,8 +693,7 @@ var Audio = /*#__PURE__*/function () {
             if (elapsedSteps > STEPS_THRESHOLD) {
               var hertz = 1 / (elapsedSteps / sampleRate); // sampleRate = 44100
 
-              _this.pitchSamples.push(hertz); // canvas2Context.fillRect(4, hertz / 2, 65, 1); // pitch marker
-
+              _this.pitchSamples.push(hertz);
             }
           }
 
@@ -903,7 +899,7 @@ var RefManager = /*#__PURE__*/function () {
   function RefManager(refs) {
     _classCallCheck(this, RefManager);
 
-    this.refs = Object.keys(refs).length ? refs : {};
+    this.refs = refs || {};
   }
 
   _createClass(RefManager, [{
@@ -949,38 +945,14 @@ var _RefManager = _interopRequireDefault(require("./RefManager"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function _createForOfIteratorHelper(o) { if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (o = _unsupportedIterableToArray(o))) { var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var it, normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it.return != null) it.return(); } finally { if (didErr) throw err; } } }; }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 var start = function start() {
-  // build refs object
-  var refEls = document.querySelectorAll('[data-ref]');
-  var refs = {};
-
-  var _iterator = _createForOfIteratorHelper(refEls),
-      _step;
-
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var refEl = _step.value;
-      var ref = refEl.getAttribute('data-ref');
-      refs[ref] = refEl;
-    }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
-  }
-
-  var piano = new _Piano.default(refs);
-  piano.render(); // build the refs after rendering the piano
-
-  var refManager = new _RefManager.default(refs);
+  // build the refs after rendering the piano
+  var refManager = new _RefManager.default();
   refManager.getRefs();
-  var audio = new _Audio.default(refs);
+  var piano = new _Piano.default(refManager.refs);
+  piano.render();
+  refManager.getRefs();
+  var audio = new _Audio.default(refManager.refs);
   audio.start();
 };
 
@@ -1022,7 +994,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35553" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34239" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

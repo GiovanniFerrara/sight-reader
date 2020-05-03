@@ -3,23 +3,16 @@ import Piano from './Piano'
 import RefManager from './RefManager'
 
 const start = () => {
-  // build refs object
-  const refEls = document.querySelectorAll('[data-ref]')
-  const refs = {}
-
-  for (const refEl of refEls) {
-    const ref = refEl.getAttribute('data-ref')
-    refs[ref] = refEl
-  }
-
-  const piano = new Piano(refs)
-  piano.render()
-
   // build the refs after rendering the piano
-  const refManager = new RefManager(refs)
+  const refManager = new RefManager()
   refManager.getRefs()
 
-  const audio = new Audio(refs)
+  const piano = new Piano(refManager.refs)
+  piano.render()
+  refManager.getRefs()
+
+  const audio = new Audio(refManager.refs)
   audio.start()
 }
+
 export default start
