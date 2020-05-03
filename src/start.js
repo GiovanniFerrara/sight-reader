@@ -12,7 +12,7 @@ const start = () => {
     refs[ref] = refEl
   }
 
-  const piano = new Piano()
+  const piano = new Piano(refs)
   piano.render()
 
   // build the refs after rendering the piano
@@ -21,6 +21,5 @@ const start = () => {
 
   const audio = new Audio(refs)
   audio.start()
-  console.log('start')
 }
 export default start

@@ -975,14 +975,13 @@ var start = function start() {
     _iterator.f();
   }
 
-  var piano = new _Piano.default();
+  var piano = new _Piano.default(refs);
   piano.render(); // build the refs after rendering the piano
 
   var refManager = new _RefManager.default(refs);
   refManager.getRefs();
   var audio = new _Audio.default(refs);
   audio.start();
-  console.log('start');
 };
 
 var _default = start;
@@ -1023,7 +1022,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "44159" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "35553" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
